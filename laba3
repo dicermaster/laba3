@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Заказ шаурмы</title>
+
+<style>
+  body {
+    font-family: Arial;
+    background: #1a1a1a;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+
+  .box {
+    background: #2a2a2a;
+    padding: 20px;
+    border-radius: 12px;
+    width: 320px;
+  }
+
+  input, select {
+    width: 100%;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 6px;
+    border: none;
+  }
+
+  button {
+    width: 100%;
+    padding: 10px;
+    background: orange;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  button:hover {
+    background: darkorange;
+  }
+
+  .error {
+    color: red;
+    font-size: 14px;
+  }
+
+  .result {
+    margin-top: 10px;
+    color: lightgreen;
+  }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>🌯 Заказ шаурмы</h2>
+
+  <input id="name" placeholder="Имя">
+  <input id="phone" placeholder="Телефон">
+
+  <select id="size">
+    <option value="">Размер шаурмы</option>
+    <option>Маленькая</option>
+    <option>Средняя</option>
+    <option>Большая</option>
+  </select>
+
+  <select id="meat">
+    <option value="">Мясо</option>
+    <option>Курица</option>
+    <option>Говядина</option>
+    <option>Смешанная</option>
+  </select>
+
+  <button onclick="order()">Заказать</button>
+
+  <div class="error" id="error"></div>
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+function order() {
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+  let size = document.getElementById("size").value;
+  let meat = document.getElementById("meat").value;
+
+  let error = document.getElementById("error");
+  let result = document.getElementById("result");
+
+  error.innerHTML = "";
+  result.innerHTML = "";
+
+  if (!name || !phone || !size || !meat) {
+    error.innerHTML = "Заполните все поля!";
+    return;
+  }
+
+  if (phone.length < 10) {
+    error.innerHTML = "Неверный номер телефона!";
+    return;
+  }
+
+
+  let text = `🌯 Заказ принят: ${name}, ${size} шаурма с ${meat}`;
+
+  result.innerHTML = text;
+
+
+  localStorage.setItem("shawarmaOrder", JSON.stringify({
+    name,
+    phone,
+    size,
+    meat
+  }));
+}
+
+
+window.onload = function() {
+  let saved = localStorage.getItem("shawarmaOrder");
+
+  if (saved) {
+    let data = JSON.parse(saved);
+    document.getElementById("name").value = data.name;
+    document.getElementById("phone").value = data.phone;
+    document.getElementById("size").value = data.size;
+    document.getElementById("meat").value = data.meat;
+  }
+}
+</script>
+
+</body>
+</html>
